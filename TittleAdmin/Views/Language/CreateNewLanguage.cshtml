@@ -1,0 +1,96 @@
+﻿@model TittleAdmin.Model.DTO.CustomNewLanguage
+
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">&times;</a>
+    <h3 class="modal-title">
+        <span>Manage Language</span>
+    </h3>
+</div>
+<div class="modal-body modal-form">
+    @using (Html.BeginForm())
+    {
+        <div>
+            <div class="form-group">
+                <div class="col-sm-4 col-sm-offset-1">
+                    @Html.DropDownListFor(x=>x.locale, new SelectList(Model.AvailableLanguages, "Key", "Value"), htmlAttributes:new { @class = "form-control", @onchange = "SetLangLabel();" })
+                </div>
+                @Html.HiddenFor(x=>x.langLabel)
+                <div class="col-sm-2">
+                    <button id="btnSubmit" type="submit" class="btn btn-primary">
+                        <span>Add New Language</span>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    }
+    <div class="col-md-12">
+        <br /></div>
+    <table class="table table-bordered table-striped">
+        <thead class="bg-light-purple white">
+            <tr>
+                <th colspan="2">List available language</th>
+            </tr>
+        </thead>
+        <tbody id="list_language">
+            @foreach (var item in Model.AddedLanguages){ 
+            <tr id="@item.Id">
+                <td style="vertical-align: middle"><strong>@item.LangLabel</strong></td>
+                <td style="text-align: center">
+                    <a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="DeleteLanguage(@item.Id);">
+                        <span class="fa fa-trash"></span> Remove
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        SetLangLabel();
+    });
+    $(".modal-form form").validate({
+        errorPlacement: function ($errorLabel, $element) {
+            var $elementToInsertAfter = $element;
+            if ($element.prop("type") === "radio") {
+                $elementToInsertAfter = $element.closest(".row");
+                $errorLabel.appendTo($elementToInsertAfter);
+            } else {
+                if ($element.hasClass("datepicker")) {
+                    $elementToInsertAfter = $element.parent();
+                    $errorLabel.insertAfter($elementToInsertAfter);
+                } else {
+                    $errorLabel.insertAfter($elementToInsertAfter);
+                }
+            }
+        },
+
+        submitHandler: function (form) {
+            var myformdata = $(".modal-form form").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Language/CreateNewLanguage",
+                data: myformdata,
+                success: function (d) {
+                    $("#CustomModal").modal("hide");
+                    //var msg = "";
+                    //if ($("#id").val() == "0") msg = "Language added successfully.";
+                    //else msg = "Language modified successfully.";
+                    //showMessage("success", msg);
+                    var url = "/Language/CreateNewLanguage";
+                    $("#manage_language .modal-content").load(url);
+                    selectedLang = $("#ddlFilterLanguage").val();
+                    $("#languageDropdown").load('@Url.Action("LanguageDropdown", "Language")', function () {
+                        $("#ddlFilterLanguage").val(selectedLang);
+                    });
+                    table.ajax.reload();
+                }
+            });
+        }
+    });
+
+    function SetLangLabel() {
+        $("#langLabel").val($("#locale option:selected").text().trim());
+    }
+</script>

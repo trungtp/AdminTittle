@@ -1,0 +1,180 @@
+﻿@model TittleAdmin.Model.DTO.CustomPromoCode
+
+
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">&times;</a>
+    <h3 class="modal-title">
+        @if (Model.id > 0)
+        {<span>Edit Promo Code</span> }
+        else
+        {<span>Create Promo Code</span>}
+    </h3>
+</div>
+<div class="modal-body modal-form">
+    @using (Html.BeginForm())
+    {
+        <div>
+            @Html.HiddenFor(model => model.id)
+            <div class="form-group">
+                @Html.LabelFor(model => model.CodeID, htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.CodeID, true, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CodeID, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-8 col-md-9">
+                        @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.Value, true, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-4 col-md-3">
+                        <label>&nbsp;</label>
+                        @Html.EnumDropDownListFor(model => model.promoValueType, true, null, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "" })
+                        <div class="input-group input-group-sm">
+                            @Html.TextBoxFor(model => model.Quantity, true, null, new { @class = "form-control" })
+                            <span class="input-group-btn">
+                                <button type="button" id="btnInfinite" class="btn btn-info btn-flat">∞</button>
+                            </span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.TypeValue, htmlAttributes: new { @class = "" })
+                        @Html.EnumDropDownListFor(model => model.promoType, true, null, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "" })
+                        <div class="input-group input-group-sm">
+                            @Html.TextBoxFor(model => model.StartDate, true, null, new { @class = "form-control from datepicker", @readonly = "readonly" })
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-info btn-flat btn-calendar"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "" })
+                        <div class="input-group input-group-sm">
+                            @Html.TextBoxFor(model => model.EndDate, true, null, new { @class = "form-control to datepicker", @readonly = "readonly" })
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-info btn-flat btn-calendar"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "" })
+                        @Html.TextAreaFor(model => model.Description, true, 2, 20, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Rules, htmlAttributes: new { @class = "" })
+                        @Html.TextAreaFor(model => model.Rules, true, 2, 20, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Rules, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <hr />
+                    <div class="col-md-10">
+                        <button id="btnSubmit" type="submit" class="btn btn-primary">
+                            @if (Model.id > 0)
+                            {<span>Update</span> }
+                            else
+                            {<span>Save</span>}
+                        </button>
+                        <a href="javascript:void(0);" class="btn btn-default" data-dismiss="modal">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('.datepicker').datepicker({
+            format: "dd/mm/yyyy"
+        })
+        $('.from').on("changeDate", function (e) {
+            // `e` here contains the extra attributes
+            $('.to').datepicker("setStartDate", e.date);
+        });
+        $(".btn-calendar").on("click", function () {
+            $(this).parent().siblings("input").datepicker('show');
+        });
+        $("#btnInfinite").on("click", function () {
+            $(this).parent().siblings("input").val('Unlimited');
+        });
+    });
+
+    $(".modal-form form").validate({
+        rules: {
+            CodeID: {
+                required: true,
+                remote: {
+                    url: "/PromoCode/IsPromoCodeExist",
+                    type: "get",
+                    data: {
+                        id: function () {
+                            return $("#id").val();
+                        }
+                    }
+                }
+            }
+        },
+        errorPlacement: function ($errorLabel, $element) {
+            var $elementToInsertAfter = $element;
+            if ($element.prop("type") === "radio") {
+                $elementToInsertAfter = $element.closest(".row");
+                $errorLabel.appendTo($elementToInsertAfter);
+            } else {
+                if ($element.hasClass("datepicker")) {
+                    $elementToInsertAfter = $element.parent();
+                    $errorLabel.insertAfter($elementToInsertAfter);
+                } else {
+                    $errorLabel.insertAfter($elementToInsertAfter);
+                }
+            }
+        },
+
+        submitHandler: function (form) {
+            var myformdata = $(".modal-form form").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/PromoCode/Index",
+                data: myformdata,
+                success: function (d) {
+                    $("#CustomModal").modal("hide");
+                    var msg = "";
+                    if ($("#id").val() == "0") msg = "Promo Code added successfully.";
+                    else msg = "Promo Code modified successfully.";
+                    showMessage("success", msg);
+                    table.ajax.reload();
+                }
+            });
+        }
+    });
+</script>

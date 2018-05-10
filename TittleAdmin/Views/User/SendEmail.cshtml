@@ -1,0 +1,77 @@
+﻿@model TittleAdmin.Model.DTO.CustomNotify
+
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">&times;</a>
+    <h3 class="modal-title">
+        <span>Send Email</span>
+    </h3>
+</div>
+<div class="modal-body modal-form">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="users">Send email to:</label>
+                <div id="email-list" style="font-size: 105%">
+                    @if (Model.ToEmails == null || Model.ToEmails.Count == 0)
+                    {
+                        <span class="label label-light-purple">All user</span>
+                    }
+                    else
+                    {
+                        foreach (var e in Model.ToEmails)
+                        {
+                            <span class="label label-light-purple">@e</span>
+                        }
+                    }
+                </div>
+                @Html.Hidden("EmailTo", Model.To)
+            </div>
+            <div class="form-group">
+                <label for="users">Subject:</label>
+                <input id="email-subject" type="text" class="form-control" name="subject" required />
+            </div>
+            <div class="form-group">
+                <label for="users">Content:</label>
+                <textarea id="content-email" rows="5" class="form-control" name="content" required></textarea>
+            </div>
+            <div class="form-group">
+                <button id="btnSubmit" type="submit" class="btn btn-primary" onclick="return SendEmail();">
+                    <span>Send Email</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        tinymce.init({
+            selector: 'textarea#content-email',
+            theme: 'modern',
+            height: 300,
+            plugins: [
+		      'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+			  'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+			  'save table contextmenu directionality emoticons template paste textcolor'
+            ],
+            toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons'
+        });
+    });
+    function SendEmail() {
+        var myformdata = {};
+        myformdata.To = $("#EmailTo").val();
+        myformdata.Subject = $("#email-subject").val();
+        myformdata.Content = tinymce.activeEditor.getContent();
+        $.ajax({
+            type: "POST",
+            url: "/User/SendEmails",
+            data: myformdata,
+            success: function (d) {
+                $("#CustomModal").modal("hide");
+                var msg = "You sent email successfully. Mail will be completed in a few minutes.";
+                showMessage("success", msg);
+                table.ajax.reload();
+            }
+        });
+        return false;
+    }
+</script>

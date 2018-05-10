@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "Tittle | Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        width: 100%;
+        margin: 0 auto;
+    }
+</style><!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="col-md-4 pull-left">
+        REPORTS
+    </h1>
+</section>
+<br />
+<section class="content">
+    <div class="row">
+        <div class="col-xs-8">
+            <button type="button" class="btn btn-primary btn-sm pull-left margin-r-5" onclick="return SentNotificationPop();"><i class="fa fa-fw fa-warning"></i> Push Notification</button>
+            <button type="button" class="btn btn-primary btn-sm pull-left margin-r-5" " onclick="return SentEmailPop();"><i class="fa fa-envelope"></i> Send Email</button>
+            <div id="reminder-notification" class="pull-left"></div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <input type="text" id="reportDate" class="form-control" style="width:50%;float:right;" />
+                <select id="selectReport" class="form-control" onchange="onReportChange();" style="width:45%;margin-right:5%;float:right;">
+                    <option value="All Users">All Users</option>
+                    <option value="Users by Country">Users by Country</option>
+                    <option value="Active Users">Active Users</option>
+                    <option value="In-app Purchases">In-app Purchases</option>
+                    <option value="Gross Revenue">Gross Revenue (before App Store deductions)</option>
+                    <option value="Total Revenue">Total Revenue (after App Store deductions)</option>
+                    <option value="Promotions">Promotions</option>
+                    <option value="Perks">Perks</option>
+                    <option value="Perks Redemption">Perks Redemption</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                Sort By :
+                <select id="selectFilter" class="form-control" multiple="multiple" style="width:40%;">
+                    <optgroup label="User Type">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="Terminated">Terminated</option>
+                    </optgroup>
+                    <optgroup label="OS Version">
+                        <option value="Android">Android</option>
+                        <option value="IOS">IOS</option>
+                    </optgroup>
+                    <optgroup label="Account Type">
+                        <option value="Email">Email</option>
+                        <option value="Facebook">Facebook</option>
+                    </optgroup>
+                    <optgroup label="Account Status">
+                        <option value="Activated">Activated</option>
+                        <option value="Yet to activate">Yet to activate</option>
+                    </optgroup>
+                    <optgroup label="In App Purchase">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </optgroup>
+                </select>
+                &nbsp;
+                <a href="javascript:void(0);" onclick="return refreshReport();"><i class="fa fa-refresh"></i> Reset</a>
+                <button type="button" class="btn btn-primary btn-sm pull-right"><i class="fa fa-download"></i> Download Excelsheet</button>
+            </div>
+        </div>
+    </div>
+    <br />
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table id="example1" class="table table-bordered table-striped"></table>
+                    <br />
+                    <div class="table-counter col-md-12">
+                        <div class="pull-right">
+                            <div class="total-count">
+                                Total Users : <span id="spnTotalUsers"></span>
+                            </div>
+                            <div id="divDeviceUsers" class="">
+                                Ios : <span id="spnIosUsers"></span>, Android : <span id="spnAndroidUsers"></span>
+                            </div>
+                            <div id="divCountryUsers" class="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<div class="modal fade" id="CustomModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="CustomModalContentDiv">
+        </div>
+    </div>
+</div>

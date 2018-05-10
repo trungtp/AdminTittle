@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2099A4B2-C2EA-48FF-8BDD-60A49052BF40}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TittleAdmin.Model</RootNamespace>
+    <AssemblyName>TittleAdmin.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\Connector.NET 6.9\Assemblies\v4.5\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\Connector.NET 6.9\Assemblies\v4.5\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Web, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\Connector.NET 6.9\Assemblies\v4.5\MySql.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DTO\CoreKeyValue.cs" />
+    <Compile Include="DTO\CustomAddOnData.cs" />
+    <Compile Include="DTO\CustomAddOnFeature.cs" />
+    <Compile Include="DTO\CustomChartData.cs" />
+    <Compile Include="DTO\CustomGridData.cs" />
+    <Compile Include="DTO\CustomLanguage.cs" />
+    <Compile Include="DTO\CustomLanguageTranslation.cs" />
+    <Compile Include="DTO\CustomNewLanguage.cs" />
+    <Compile Include="DTO\CustomNotification.cs" />
+    <Compile Include="DTO\CustomNotificationUser.cs" />
+    <Compile Include="DTO\CustomNotify.cs" />
+    <Compile Include="DTO\CustomPasswordReset.cs" />
+    <Compile Include="DTO\CustomPerkTask.cs" />
+    <Compile Include="DTO\CustomPromoCode.cs" />
+    <Compile Include="DTO\CustomRedemptionGift.cs" />
+    <Compile Include="DTO\CustomResetUser.cs" />
+    <Compile Include="DTO\CustomUser.cs" />
+    <Compile Include="DTO\CustomUserAction.cs" />
+    <Compile Include="DTO\CustomUserInfo.cs" />
+    <Compile Include="DTO\CustomUserLogin.cs" />
+    <Compile Include="DTO\CustomUserPlan.cs" />
+    <Compile Include="DTO\CustomUserRedeem.cs" />
+    <Compile Include="Model\access.cs" />
+    <Compile Include="Model\action.cs" />
+    <Compile Include="Model\activity.cs" />
+    <Compile Include="Model\add_ons.cs" />
+    <Compile Include="Model\application.cs" />
+    <Compile Include="Model\app_usage.cs" />
+    <Compile Include="Model\command.cs" />
+    <Compile Include="Model\commands_android.cs" />
+    <Compile Include="Model\comment.cs" />
+    <Compile Include="Model\config.cs" />
+    <Compile Include="DTO\CoreEnums.cs" />
+    <Compile Include="Model\data_limit.cs" />
+    <Compile Include="Model\device.cs" />
+    <Compile Include="Model\device_installations.cs" />
+    <Compile Include="Model\geofencing.cs" />
+    <Compile Include="Model\job.cs" />
+    <Compile Include="Model\key.cs" />
+    <Compile Include="Model\key_sandboxs.cs" />
+    <Compile Include="Model\kid.cs" />
+    <Compile Include="Model\kid_package.cs" />
+    <Compile Include="Model\language.cs" />
+    <Compile Include="Model\link_block.cs" />
+    <Compile Include="Model\link_usage.cs" />
+    <Compile Include="Model\location.cs" />
+    <Compile Include="Model\location_landmark.cs" />
+    <Compile Include="Model\map.cs" />
+    <Compile Include="Model\migration.cs" />
+    <Compile Include="Model\TittleEntities.cs" />
+    <Compile Include="Model\notification.cs" />
+    <Compile Include="Model\notification_boxes.cs" />
+    <Compile Include="Model\notification_messages.cs" />
+    <Compile Include="Model\order.cs" />
+    <Compile Include="Model\package.cs" />
+    <Compile Include="Model\password_resets.cs" />
+    <Compile Include="Model\payment_histories.cs" />
+    <Compile Include="Model\perks_points.cs" />
+    <Compile Include="Model\perks_tasks.cs" />
+    <Compile Include="Model\plan.cs" />
+    <Compile Include="Model\promo_codes.cs" />
+    <Compile Include="Model\redeem.cs" />
+    <Compile Include="Model\reminder.cs" />
+    <Compile Include="Model\schedule.cs" />
+    <Compile Include="Model\schedulesv2.cs" />
+    <Compile Include="Model\send_mail.cs" />
+    <Compile Include="Model\setting.cs" />
+    <Compile Include="Model\slot.cs" />
+    <Compile Include="Model\system_settings.cs" />
+    <Compile Include="Model\task_schedules.cs" />
+    <Compile Include="Model\task_schedules_trigger.cs" />
+    <Compile Include="Model\translation.cs" />
+    <Compile Include="Model\translations_sandbox.cs" />
+    <Compile Include="Model\user.cs" />
+    <Compile Include="Model\user_package.cs" />
+    <Compile Include="Model\user_plans.cs" />
+    <Compile Include="Model\user_promo_code.cs" />
+    <Compile Include="Model\user_redeem.cs" />
+    <Compile Include="Model\zone.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Model\packages.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

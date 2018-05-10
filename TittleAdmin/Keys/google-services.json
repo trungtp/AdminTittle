@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "965217049055",
+    "firebase_url": "https://parential-kit-application.firebaseio.com",
+    "project_id": "parential-kit-application",
+    "storage_bucket": "parential-kit-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965217049055:android:d13c4bf7a0cb399b",
+        "android_client_info": {
+          "package_name": "com.bluecube.parentalkit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "965217049055-8h2p0naa0k0nu824m5p5j7pau8sq7toc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKLRj2Pf8v-t49QlS-c4Xd83Ice85thDs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
