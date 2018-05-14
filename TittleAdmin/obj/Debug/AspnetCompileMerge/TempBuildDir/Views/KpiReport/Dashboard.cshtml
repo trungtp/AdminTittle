@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "Tittle | Report Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="col-md-4 pull-left">
+        REPORT DASHBOARD
+    </h1>
+</section>
+<br />
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- LINE CHART -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">User Action</h3>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="lineChart1" style="height: 288px; width: 588px;" width="588" height="288"></canvas>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <div class="col-md-6">
+            <!-- LINE CHART -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">User Promo Code</h3>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="lineChart2" style="height: 288px; width: 588px;" width="588" height="288"></canvas>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <div class="col-md-12">
+            <!-- LINE CHART -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">User Plan Usage</h3>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="lineChart3" style="height: 288px; width: 588px;" width="588" height="288"></canvas>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+</section>
+

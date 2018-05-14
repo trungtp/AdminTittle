@@ -1,0 +1,119 @@
+﻿@model TittleAdmin.Model.DTO.CustomRedemptionGift
+
+
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">&times;</a>
+    <h3 class="modal-title">
+        @if (Model.id > 0)
+        {<span>Edit Redeem</span> }
+        else
+        {<span>Create Redeem</span>}
+    </h3>
+</div>
+<div class="modal-body modal-form">
+    @using (Html.BeginForm())
+    {
+        <div>
+            @Html.HiddenFor(model => model.id)
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.name, true, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "" })
+                        @Html.DropDownList("type", new List<SelectListItem> {
+                            new SelectListItem{ Text="inApp", Value = "1" },
+                            new SelectListItem{ Text="nonApp", Value = "0" }
+                          }, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.frequency, htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.frequency, true, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.frequency, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.points, htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.points, true, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.points, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <hr />
+                    <div class="col-md-10">
+                        <button id="btnSubmit" type="submit" class="btn btn-primary">
+                            @if (Model.id > 0)
+                            {<span>Update</span> }
+                            else
+                            {<span>Save</span>}
+                        </button>
+                        <a href="javascript:void(0);" class="btn btn-default" data-dismiss="modal">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    $(".modal-form form").validate({
+        rules: {
+            name: {
+                required: true,
+                remote: {
+                    url: "/Redeem/IsRedemptionGiftExist",
+                    type: "get",
+                    data: {
+                        id: function () {
+                            return $("#id").val();
+                        }
+                    }
+                }
+            }
+        },
+        errorPlacement: function ($errorLabel, $element) {
+            var $elementToInsertAfter = $element;
+            if ($element.prop("type") === "radio") {
+                $elementToInsertAfter = $element.closest(".row");
+                $errorLabel.appendTo($elementToInsertAfter);
+            } else {
+                if ($element.hasClass("datepicker")) {
+                    $elementToInsertAfter = $element.parent();
+                    $errorLabel.insertAfter($elementToInsertAfter);
+                } else {
+                    $errorLabel.insertAfter($elementToInsertAfter);
+                }
+            }
+        },
+
+        submitHandler: function (form) {
+            var myformdata = $(".modal-form form").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Redeem/Index",
+                data: myformdata,
+                success: function (d) {
+                    $("#CustomModal").modal("hide");
+                    var msg = "";
+                    if ($("#id").val() == "0") msg = "Redeem added successfully.";
+                    else msg = "Redeem modified successfully.";
+                    showMessage("success", msg);
+                    table.ajax.reload();
+                }
+            });
+        }
+    });
+</script>
+

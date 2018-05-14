@@ -567,7 +567,7 @@ function getAddonFeatures() {
             //console.log(data);
             var html = '<thead>';
             html += '<tr>';
-            html += '<th>Package</th>';
+            html += '<th>Plan</th>';
             html += '<th>Current</th>';
             html += '<th>Active</th>';
             html += '<th>Expired</th>';

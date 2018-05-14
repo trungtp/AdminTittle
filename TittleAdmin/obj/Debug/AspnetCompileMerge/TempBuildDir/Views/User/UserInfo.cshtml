@@ -1,0 +1,56 @@
+﻿@model TittleAdmin.Model.DTO.CustomUserInfo
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">&times;</a>
+    <h3 class="modal-title">
+        <span>User Information</span>
+    </h3>
+</div>
+<div class="modal-body modal-form">
+    @Html.HiddenFor(m => m.id)
+    <div class="row">
+        <div id="tabs" class="col-md-12">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tabs-1" data-toggle="tab">Plan</a></li>
+                <li><a href="#tabs-2" data-toggle="tab">Tasks</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="tabs-1" class="tab-pane active">
+                    @foreach (var item in Model.plans)
+                    {
+                        <p>@item</p>
+                    }
+                </div>
+                <div id="tabs-2" class="tab-pane">
+                    <table id="example2" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Number Progress</th>
+                                <th>Points Reward</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.tasks)
+                            {
+                                <tr>
+                                    <td>@item.id</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.NumberInProgress</td>
+                                    <td>@item.Points</td>
+                                    <td>@item.Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+</div>
+<script>
+  $( function() {
+      $("#tabs").tabs();
+      $("#example2").DataTable();
+  } );
+</script>

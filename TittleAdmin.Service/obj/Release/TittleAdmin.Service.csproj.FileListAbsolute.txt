@@ -1,1 +1,3 @@
 D:\TrungTP\Title\TittleAdmin1\TittleAdmin.Service\obj\Release\TittleAdmin.Service.csproj.CoreCompileInputs.cache
+D:\TrungTP\Title\AdminTittle\TittleAdmin.Service\obj\Release\TittleAdmin.Service.csprojAssemblyReference.cache
+D:\TrungTP\Title\AdminTittle\TittleAdmin.Service\obj\Release\TittleAdmin.Service.csproj.CoreCompileInputs.cache

@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Tittle | Redeems";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="col-md-4 pull-left">
+        REDEMPTION GIFT
+    </h1>
+    <a href="javascript:void(0);" class="btn btn-primary pull-right" onclick="AddEditCode(0);">
+        Add New
+    </a>
+</section>
+<br />
+<section class="content">
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table id="example1" class="table table-bordered table-striped"></table>
+                    <br />
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<div class="modal fade" id="CustomModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="CustomModalContentDiv">
+        </div>
+    </div>
+</div>
+
+<script>
+    var AddEditCode=function(Id){
+        var url = "/Redeem/AddRedemptionGift?Id=" + Id;
+        $("#CustomModalContentDiv").load(url, function () {
+            $("#CustomModal").modal("show");
+        });
+    }
+    var DeleteCode = function (Id) {
+        if (confirm("Are you sure, you want to delete this redeem?")) {
+            var url = "/Redeem/DeleteRedemptionGift";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { "Id": Id },
+                success: function (d) {
+                    showMessage("success", "Redeem removed successfully.");
+                    table.ajax.reload();
+                }
+            });
+        }
+    }
+</script>

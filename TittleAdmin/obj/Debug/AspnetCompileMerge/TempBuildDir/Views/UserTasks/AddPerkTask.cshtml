@@ -1,0 +1,139 @@
+﻿@model TittleAdmin.Model.DTO.CustomPerkTask
+
+
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">&times;</a>
+    <h3 class="modal-title">
+        @if (Model.id > 0)
+        {<span>Edit Task</span> }
+        else
+        {<span>Create Task</span>}
+    </h3>
+</div>
+<div class="modal-body modal-form">
+    @using (Html.BeginForm())
+    {
+        <div>
+            @Html.HiddenFor(model => model.id)
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.key, htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.key, true, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.key, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.name, true, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.number_to_finish, htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.number_to_finish, true, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.number_to_finish, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.score, htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.score, true, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.score, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.icon, htmlAttributes: new { @class = "" })
+                        @if (Model.id > 0)
+                        {
+                            <img height="30" width="30" src="@Model.icon" />
+                            @Html.HiddenFor(model=> model.icon)
+                        }
+                        <input id="imageFile" type="file" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <hr />
+                    <div class="col-md-10">
+                        <button id="btnSubmit" type="submit" class="btn btn-primary">
+                            @if (Model.id > 0)
+                            {<span>Update</span> }
+                            else
+                            {<span>Save</span>}
+                        </button>
+                        <a href="javascript:void(0);" class="btn btn-default" data-dismiss="modal">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    $(".modal-form form").validate({
+        rules: {
+            key: {
+                required: true,
+                remote: {
+                    url: "/UserTasks/IsPerkTaskExist",
+                    type: "get",
+                    data: {
+                        id: function () {
+                            return $("#id").val();
+                        }
+                    }
+                }
+            }
+        },
+        errorPlacement: function ($errorLabel, $element) {
+            var $elementToInsertAfter = $element;
+            if ($element.prop("type") === "radio") {
+                $elementToInsertAfter = $element.closest(".row");
+                $errorLabel.appendTo($elementToInsertAfter);
+            } else {
+                if ($element.hasClass("datepicker")) {
+                    $elementToInsertAfter = $element.parent();
+                    $errorLabel.insertAfter($elementToInsertAfter);
+                } else {
+                    $errorLabel.insertAfter($elementToInsertAfter);
+                }
+            }
+        },
+
+        submitHandler: function (form) {
+            var myformdata = new FormData();
+            myformdata.append('image', $("#imageFile").get(0).files[0]);
+            myformdata.append('score', $("#score").val());
+            myformdata.append('number_to_finish', $("#number_to_finish").val());
+            myformdata.append('name', $("#name").val());
+            myformdata.append('key', $("#key").val());
+            myformdata.append('id', $("#id").val());
+            myformdata.append('icon', $("#icon").length>0?$("#icon").val():"");
+            $.ajax({
+                type: "POST",
+                url: "/UserTasks/Index",
+                enctype: 'multipart/form-data',
+                data: myformdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (d) {
+                    $("#CustomModal").modal("hide");
+                    var msg = "";
+                    if ($("#id").val() == "0") msg = "User Task added successfully.";
+                    else msg = "User Task modified successfully.";
+                    showMessage("success", msg);
+                    table.ajax.reload();
+                }
+            });
+        }
+    });
+</script>

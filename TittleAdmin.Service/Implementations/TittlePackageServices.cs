@@ -269,19 +269,35 @@ namespace TittleAdmin.Service.Implementations
             StringBuilder strQuery = new StringBuilder();
             using (var db = new TittleEntities())
             {
-                strQuery.Append("SELECT PackageFullName, sum(if (expired_at>now(), 1, 0)) as CurrentTotal,");
-                strQuery.Append(" 0 as ActiveTotal, ");
-                strQuery.Append("sum(if (expired_at <= now(), 1, 0)) as ExpiredTotal from ");
+                strQuery.Append("SELECT c.PackageFullName, c.CurrentTotal, a.ActiveTotal, 0 AS ExpiredTotal FROM ");
                 strQuery.Append("( ");
-                strQuery.Append("SELECT concat(if (p.type = 'access', 'Parent - ', 'Child - '),p.unit,' Device') as PackageFullName,  ");
-                strQuery.Append("up.package_id, p.unit, p.type, if (up.expired_at = null,now(),up.expired_at) as expired_at ");
-                strQuery.Append("FROM packages as p left join ");
-                strQuery.Append("user_package as up on up.package_id = p.id left join ");
-                strQuery.Append("users as u on u.id = up.user_id ");
-                strQuery.Append("where p.version = 2 AND p.unit <> 0 ");
-                strQuery.Append(") as t ");
-                strQuery.Append("group by t.PackageFullName ");
-                strQuery.Append("order by t.type,t.unit ");
+                strQuery.Append("SELECT PackageFullName, COUNT(t.plan_id) AS CurrentTotal FROM ");
+                strQuery.Append("( ");
+                strQuery.Append("SELECT CONCAT( 'Plan ', p.name) AS PackageFullName, ");
+                strQuery.Append("up.plan_id, up.user_id ");
+                strQuery.Append("FROM plans AS p ");
+                strQuery.Append("LEFT JOIN user_plans AS up ON up.plan_id = p.id ");
+                strQuery.Append("LEFT JOIN users AS u ON u.id = up.user_id ");
+                strQuery.Append(") AS t ");
+                strQuery.Append("GROUP BY t.PackageFullName ");
+                strQuery.Append(") AS c ");
+                strQuery.Append("LEFT JOIN ");
+                strQuery.Append("( ");
+                strQuery.Append("SELECT t.PackageFullName, ");
+                strQuery.Append("COUNT(t.plan_id) AS ActiveTotal FROM ");
+                strQuery.Append("( ");
+                strQuery.Append("SELECT CONCAT( 'Plan ', p.name) AS PackageFullName, ");
+                strQuery.Append("up.plan_id, up.user_id, ");
+                strQuery.Append("TIMESTAMPDIFF(DAY, MAX(uh1.updated_at), CURDATE()) AS date_not_active ");
+                strQuery.Append("FROM plans AS p ");
+                strQuery.Append("LEFT JOIN user_plans AS up ON up.plan_id = p.id ");
+                strQuery.Append("LEFT JOIN users AS u ON u.id = up.user_id ");
+                strQuery.Append("LEFT JOIN user_histories AS uh1 ON uh1.user_id = up.user_id ");
+                strQuery.Append("GROUP BY up.plan_id, up.user_id ");
+                strQuery.Append(") AS t ");
+                strQuery.Append("WHERE t.date_not_active < 90 OR t.PackageFullName = 'Plan A' ");
+                strQuery.Append("GROUP BY t.PackageFullName ");
+                strQuery.Append(") AS a ON a.PackageFullName = c.PackageFullName ");
                 _data = db.Database.SqlQuery<CustomAddOnData>(strQuery.ToString()).ToList();
             }
             return _data;

@@ -1,0 +1,11 @@
+﻿@model IEnumerable<TittleAdmin.Model.DTO.CustomLanguage>
+
+
+<div class="form-group">
+    <select class="form-control" id="ddlFilterLanguage" onchange="getLanguagesList();">
+        @foreach (var item in Model)
+        {
+            <option value="@item.Id">@item.LangLabel</option>
+        }
+    </select>
+</div>

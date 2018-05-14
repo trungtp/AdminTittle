@@ -1,0 +1,123 @@
+﻿@model List<TittleAdmin.Model.DTO.CustomLanguage>
+
+@{
+    ViewBag.Title = "Tittle | Languages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="col-md-4 pull-left">
+        LANGUAGE TRANSLATION
+    </h1>
+</section>
+<br />
+<section class="content">
+    <div class="">
+        <div class="form-group">
+            <label class="col-sm-1 control-label">Language: </label>
+            <div id="languageDropdown" class="col-sm-3">
+                @Html.Partial("LanguageDropdown", Model)
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <button type="button" class="btn btn-block btn-primary" onclick="return manageLanguages();">
+                        <i class="fa fa-list"></i> Manage Language
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <button type="button" class="btn btn-block btn-primary" onclick="return createNewKeyPopup();">
+                        <i class="fa fa-plus"></i> Create New Key
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <button type="button" class="btn btn-block btn-primary" onclick="return downloadXML();">
+                        <i class="fa fa-download"></i> Download XML
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table id="example1" class="table table-bordered table-striped"></table>
+                    <br />
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    <!-- Modal create new key -->
+    <div class="modal fade" tabindex="1" role="dialog" id="add_new_key">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <!-- Modal manage language -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="manage_language">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var selectedLang = "";
+    var manageLanguages = function () {
+        var url = "@Url.Action("CreateNewLanguage", "Language")";
+        $("#manage_language .modal-content").load(url, function () {
+            $("#manage_language").modal("show");
+        });
+    }
+    var createNewKeyPopup = function () {
+        var url = "@Url.Action("CreateNewKey", "Language")";
+        $("#add_new_key .modal-content").load(url, function () {
+            $("#add_new_key").modal("show");
+        });
+    }
+    var DeleteLanguage = function (Id) {
+        if (confirm("Are you sure, you want to delete this language?")) {
+            var url = "@Url.Action("DeleteLanguage", "Language")";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { "Id": Id },
+                success: function (d) {
+                    //showMessage("success", "Language removed successfully.");
+                    var url = "@Url.Action("CreateNewLanguage", "Language")";
+                    $("#manage_language .modal-content").load(url);
+                    selectedLang = $("#ddlFilterLanguage").val();
+                    $("#languageDropdown").load('@Url.Action("LanguageDropdown", "Language")', function () {
+                        $("#ddlFilterLanguage").val(selectedLang);
+                    });
+                }
+            });
+        }
+    }
+    var DeleteKey = function (Id) {
+        if (confirm("Are you sure, you want to delete this key?")) {
+            var url = "@Url.Action("DeleteKey", "Language")";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { "Id": Id },
+                success: function (d) {
+                    showMessage("success", "Key removed successfully.");
+                    table.ajax.reload();
+                }
+            });
+        }
+    }
+
+</script>
+

@@ -1,0 +1,117 @@
+﻿@model TittleAdmin.Model.DTO.CustomNotification
+
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">&times;</a>
+    <h3 class="modal-title">
+        <span>Edit Notification</span>
+    </h3>
+</div>
+<div class="modal-body modal-form">
+    @using (Html.BeginForm())
+    {
+        <div>
+            @Html.HiddenFor(model => model.id)
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.name, true, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.OnDate, htmlAttributes: new { @class = "" })
+                        <div class="input-group input-group-sm">
+                            @Html.TextBoxFor(model => model.OnDate, true, null, new { @class = "form-control datetimepicker", @readonly = "readonly" })
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-info btn-flat btn-calendar"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "" })
+                        @Html.EnumDropDownListFor(model => model.notificationType, true, null, new { @class = "form-control" })
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "" })
+                        @Html.EnumDropDownListFor(model => model.notificationStatus, true, null, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.content, htmlAttributes: new { @class = "" })
+                @Html.TextAreaFor(model => model.content, true, 2, 20, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <hr />
+                    <div class="col-md-10">
+                        <button id="btnSubmit" type="submit" class="btn btn-primary">
+                            @if (Model.id > 0)
+                            {<span>Update</span> }
+                            else
+                            {<span>Save</span>}
+                        </button>
+                        <a href="javascript:void(0);" class="btn btn-default" data-dismiss="modal">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+    
+<script>
+    $(document).ready(function () {
+        $('.datetimepicker').daterangepicker({
+            "singleDatePicker": true,
+            "timePicker": true,
+            locale: {
+                format: 'DD/MM/YYYY h:mm A'
+            }
+        });
+        $(".btn-calendar").on("click", function () {
+            $(this).parent().siblings("input").datetimepicker('show');
+        });
+    });
+
+    $(".modal-form form").validate({
+        errorPlacement: function ($errorLabel, $element) {
+            var $elementToInsertAfter = $element;
+            if ($element.prop("type") === "radio") {
+                $elementToInsertAfter = $element.closest(".row");
+                $errorLabel.appendTo($elementToInsertAfter);
+            } else {
+                if ($element.hasClass("datepicker")) {
+                    $elementToInsertAfter = $element.parent();
+                    $errorLabel.insertAfter($elementToInsertAfter);
+                } else {
+                    $errorLabel.insertAfter($elementToInsertAfter);
+                }
+            }
+        },
+
+        submitHandler: function (form) {
+            var myformdata = $(".modal-form form").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Notification/Index",
+                data: myformdata,
+                success: function (d) {
+                    $("#CustomModal").modal("hide");
+                    var msg = "";
+                    if ($("#id").val() == "0") msg = "Notification added successfully.";
+                    else msg = "Notification modified successfully.";
+                    showMessage("success", msg);
+                    table.ajax.reload();
+                }
+            });
+        }
+    });
+</script>

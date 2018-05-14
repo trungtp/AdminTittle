@@ -1,0 +1,121 @@
+﻿@model TittleAdmin.Model.DTO.CustomNotify
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">&times;</a>
+    <h3 class="modal-title">
+        <span>Push Notification</span>
+    </h3>
+</div>
+<div class="modal-body modal-form">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="users">Send notification to:</label>
+                <div id="email-list" style="font-size: 105%">
+                    @if (Model.ToEmails == null || Model.ToEmails.Count == 0)
+                    {
+                        <span class="label label-light-purple">All user</span>
+                    }
+                    else
+                    {
+                        foreach (var e in Model.ToEmails)
+                        {
+                            <span class="label label-light-purple">@e</span>
+                        }
+                    }
+                </div>
+                @Html.Hidden("NotificationTo", Model.To)
+            </div>
+            <div class="form-group">
+                <label for="users">Type:</label>
+                <select id="notification-type" name="type" class="form-control" onchange="OnNotificationTypeChange();">
+                    <option value="immediately">Immediately</option>
+                    <option value="onetime">One time</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+            </div>
+            <div class="form-group form-others" style="display:none;">
+                <label for="users">Name:</label>
+                <input id="notification-name" type="text" class="form-control" />
+            </div>
+            <div class="form-group form-others" style="display:none;">
+                <label for="users">Time start:</label>
+                <input id="notification-time" type="text" class="form-control singledatetimepicker" />
+            </div>
+            <div class="form-group">
+                <label for="users">Content:</label>
+                <textarea id="content-message" rows="5" class="form-control" name="content" required></textarea>
+            </div>
+            <div class="form-immediately form-group">
+                <button id="btnSubmit" type="submit" class="btn btn-primary" onclick="return SendNotification('');">
+                    <span>Send Notification</span>
+                </button>
+            </div>
+            <div class="form-others form-group" style="display:none;">
+                <button id="btnSubmit" type="submit" class="btn btn-primary" onclick="return SendNotification('Draft');">
+                    <span>Save As Draft</span>
+                </button>
+                <button id="btnSubmit" type="submit" class="btn btn-primary" onclick="return SendNotification('Published');">
+                    <span>Publish Now</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.singledatetimepicker').daterangepicker({
+            "singleDatePicker": true,
+            "timePicker": true,
+            locale: {
+                format: 'DD/MM/YYYY h:mm A'
+            }
+        });
+    });
+
+    function SendNotification(status) {
+        var myformdata = {};
+        myformdata.To = $("#NotificationTo").val();
+        myformdata.Type = $("#notification-type").val();
+        if (myformdata.Type != "immediately") {
+            myformdata.Name = $("#notification-name").val();
+            myformdata.TimeStart = $("#notification-time").val();
+        }
+        myformdata.Content = $("#content-message").val();
+        myformdata.Status = status;
+        if (myformdata.Content.trim() == "")
+            return false;
+        $.ajax({
+            type: "POST",
+            url: "/User/PushNotifications",
+            data: myformdata,
+            success: function (d) {
+                $("#CustomModal").modal("hide");
+                if ($("#notification-type").val() != "immediately") {
+                    var msg = "You setup notification successfully.";
+                    showMessage("success", msg);
+                }
+                else {
+                    var msg = "You push notification successfully.";
+                    showMessage("success", msg);
+                }
+                table.ajax.reload();
+            }
+        });
+        return false;
+    }
+
+    function OnNotificationTypeChange() {
+        var v = $("#notification-type").val();
+        if (v == "immediately") {
+            $(".form-immediately").show();
+            $(".form-others").hide();
+        }
+        else {
+            $(".form-immediately").hide();
+            $(".form-others").show();
+        }
+    }
+</script>

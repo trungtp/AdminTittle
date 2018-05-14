@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Tittle | Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="col-md-4 pull-left">
+        NOTIFICATION LIST
+    </h1>
+</section>
+<br />
+<section class="content">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-4 pull-right">
+                <select class="form-control" id="ddlFilterNotification" onchange="getNotificationsList();">
+                    <option value="All" selected="selected">All</option>
+                    <option value="Today">Active Notification Today</option>
+                </select>
+            </div>
+            <label class="col-sm-2 control-label pull-right">Filter</label>
+        </div>
+    </div>
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table id="example1" class="table table-bordered table-striped"></table>
+                    <br />
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<div class="modal fade" id="CustomModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="CustomModalContentDiv">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="CustomDataModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="CustomDataModalContentDiv">
+        </div>
+    </div>
+</div>
+
+<script>
+    var EditNotification = function (Id) {
+        var url = "/Notification/UpdateNotification?Id=" + Id;
+        $("#CustomModalContentDiv").load(url, function () {
+            $("#CustomModal").modal("show");
+        });
+    }
+    var DeleteNotification = function (Id) {
+        if (confirm("Are you sure, you want to delete this notification?")) {
+            var url = "/Notification/DeleteNotification";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { "Id": Id },
+                success: function (d) {
+                    showMessage("success", "Notification removed successfully.");
+                    table.ajax.reload();
+                }
+            });
+        }
+    }
+    var PublishNotification = function (Id) {
+        if (confirm("Are you sure, you want to publish this notification?")) {
+            var url = "/Notification/PublishNotification";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { "Id": Id },
+                success: function (d) {
+                    showMessage("success", "Notification published successfully.");
+                    table.ajax.reload();
+                }
+            });
+        }
+    }
+
+    var ShowNotificationUsers = function (Id) {
+        var url = "/Notification/GetNotificationUsers?Id=" + Id;
+        $("#CustomDataModalContentDiv").load(url, function () {
+            $("#CustomDataModal").modal("show");
+        });
+    }
+</script>
